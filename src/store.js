@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-let productId = 1; ///for new products id
+let iterator = 1; 
 
 const initialProductsState = {
     products:[],
@@ -13,18 +13,18 @@ const initialCommentsState = {
 
 const productsReducer = (state = initialProductsState,action) => {
     switch(action.type) {
-        case 'products/setProducts':
-            return {...state,
-                products:action.payload};
+
             case 'products/addProduct':
                 return {...state,
-                    products:[...state.products,{...action.payload,id:productId++}]}; /// + new id parameter
+                    products:[...state.products,{...action.payload,id:iterator++}]
+                }; 
                     case 'products/removeProduct':
                         return {...state,
                         products: state.products.filter(product =>product.id !== action.payload)};
                         case 'products/updateProduct':
                             return {...state,
                             products:state.products.map(product => product.id === action.payload.id ? 
+                             
                                 action.payload : product
                                 ),
                             }
@@ -40,6 +40,7 @@ const commentsReducer = (state = initialCommentsState, action) => {
         case 'comments/addComment':
             return {...state,
             comments: [...state.comments, action.payload]};
+            
             case 'comments/removeComment':
                 return {...state,
                 comments:state.comments.filter(comment => comment.id !== action.payload)};

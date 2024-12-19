@@ -3,22 +3,23 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 const AddProductModal = ({isOpen,closeModal}) => {
+    const dispatch = useDispatch();
+
     const [name,setName] = useState('');
     const [count,setCount] = useState('');
-
-    const dispatch = useDispatch();
 
     const addProduct = () => {
        dispatch({
         type:'products/addProduct',
-        payload:{name,count:parseInt(count)},///because it goes string
+        payload:{name,count:parseInt(count)},
        });
-       closeModal();//and close after adding
+       closeModal();
 
     }
-///if true, open modal with inputs
+
     return (
         <Modal isOpen={isOpen} onRequestClose={closeModal}>
+         
             <h2>Add New Product?</h2>
             <div>
                 <label>Name :</label>
@@ -38,7 +39,7 @@ const AddProductModal = ({isOpen,closeModal}) => {
                 />
                 
             </div>
-            <button onClick={addProduct}>Add</button>
+            <button onClick={addProduct}>Confirm</button>
             <button onClick={closeModal}>Cancel</button>
         </Modal>
     )

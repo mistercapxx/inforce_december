@@ -1,69 +1,108 @@
 import { useDispatch, useSelector } from "react-redux";
-import AddProductModal from './AddProductModal';
+import AddProductModal from "./AddProductModal";
 import { useState } from "react";
 import ProductView from "./ProductView";
+import ConfirmDeleteModal from "./ConfirmDeleteModal"; 
 
 const ProductList = () => {
-const products = useSelector(state => state.products.products);
-const dispatch = useDispatch();
-const [isModalOpen,setIsModalOpen] = useState(false); ///open modal
-const [sortOption,setSortOption] = useState('name'); ///for sorting by name or qunatity// default is name
-const [selectedProductId, setSelectedProductId] = useState(null);///for selected product from list
+  const products = useSelector((state) => state.products.products);
+  const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [sortOption, setSortOption] = useState("name");
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [productToDelete,setProductToDelete] = useState(null);
 
 
+  const productSelection = (productId) => {    
+ 
+    setSelectedProductId(productId); 
 
-const handleSortChange = (e) => {
-    setSortOption(e.target.value); ///choosing filter
-    ///by current value from select option
-};
+  };
 
-const openModal = () => setIsModalOpen(true);
-const closeModal = () => setIsModalOpen(false); ///close modal if cancel or added already
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value); 
 
-const sortedProducts = [...products].sort((a,b)=> { ///sorted array by name or quantity
-    if(sortOption === 'name') {
-        return a.name.localeCompare(b.name);
-    }
-    else {
-        return a.count - b.count;
-    }
-})
+  };
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {  setProductToDelete(null); setIsModalOpen(false);} 
 
 
-// const addProduct = (newProduct) => {
-//     dispatch({
-//         type:'products/addProduct',
-// payload:newProduct})
-// }
-const removeProduct = (productId) => {
-    dispatch({
-        type:'products/removeProduct',
-        payload:productId})
-}
+  const sortedProducts = [...products].sort((a, b) => {
 
-    return (
-<div>
-    <h1>Products</h1>
-    <select onChange={handleSortChange} value={sortOption}>
-        <option value="name">By Name</option> 
-        <option value="count">By Quantity</option>
-    </select>
+    if (sortOption === "name") {
 
-        <ul>
-        {sortedProducts.map(product => (
-            <li key={product.id}>
-                   {product.name} - {product.count}
-                <button onClick={()=>removeProduct(product.id)}>Remove</button>
-            </li>
-        ))}
-    </ul>
-
-   
-    <button onClick={openModal}>Add New Product</button>
+      return a.name.localeCompare(b.name);
+    } else {
+      return a.count - b.count;
   
-    {/* <button onClick={()=> addProduct({name:'New Product'})}>Add Product</button> */}
-    <AddProductModal isOpen={isModalOpen} closeModal={closeModal}/>
-</div>
-    )
+    }
+  });
+
+
+  const removeProduct = () => {
+    if(productToDelete) 
+    {
+      dispatch({
+        type:'products/removeProduct',
+        payload:productToDelete,
+      });
+      setProductToDelete(null); 
+      closeModal(); 
+    }
+  };
+
+  return (
+    <div>
+
+
+
+      {selectedProductId ? (
+        <>
+    
+        <button onClick={()=>setSelectedProductId(null)}>Back to List</button>
+
+             <ProductView productId={selectedProductId} />
+    
+        </>
+   
+      ) : (
+       <>
+          <h1>Products</h1>
+      <select onChange={handleSortChange} value={sortOption}>
+        <option value="name">Sort By Name</option>
+        <option value="count">Sort By Quantity</option>
+      </select>
+      <br/>
+      <br/>
+        <ul>
+        
+          {sortedProducts.map((product) => (
+            <li key={product.id}>
+          
+              <button onClick={() => productSelection(product.id)}> 
+                 
+                {product.name} - {product.count}  <t/>
+              </button>
+              <t/> <t/> <t/> <t/>
+     
+              <button onClick={() => setProductToDelete(product.id)}>Remove</button> 
+            </li>
+          ))}
+        </ul>
+        <button onClick={openModal}>Add New Product</button>
+        </>
+      )}
+    
+      <br/>
+      <br/>
+
+  
+
+      <AddProductModal isOpen={isModalOpen} closeModal={closeModal} />
+      <ConfirmDeleteModal isOpen={productToDelete !== null} closeModal={closeModal} onConfirm={removeProduct}/>
+ 
+    </div>
+  );
 };
 export default ProductList;
