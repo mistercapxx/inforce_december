@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/inforce_december/static/css/main.e6c13ad2.css",
+    "main.js": "/inforce_december/static/js/main.87554592.js",
+    "index.html": "/inforce_december/index.html",
+    "main.e6c13ad2.css.map": "/inforce_december/static/css/main.e6c13ad2.css.map",
+    "main.87554592.js.map": "/inforce_december/static/js/main.87554592.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.87554592.js"
+  ]
+}
